@@ -1,0 +1,67 @@
+project_name: juju_exporter
+
+changelog:
+  skip: false
+
+release:
+  prerelease: auto
+
+builds:
+  - id: juju_exporter
+    main: .
+    binary: juju_exporter
+    ldflags:
+    - -s
+    - -w
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - 386
+      - amd64
+      - arm
+      - arm64
+    goarm:
+      - 6
+      - 7
+    ignore:
+      - goos: darwin
+        goarch: 386
+
+archives:
+  - id: juju_exporter
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    builds:
+      - juju_exporter
+    files:
+      - LICENSE
+      - README.md
+    wrap_in_directory: true
+
+nfpms:
+  - id: juju_exporter
+    builds:
+      - juju_exporter
+    vendor: Aggelos Kolaitis
+    homepage: https://github.com/neoaggelos/juju_exporter
+    maintainer: Aggelos Kolaitis <neoaggelos@gmail.com>
+    description: Prometheus exporter for FIO benchmarks
+    license: Apache 2.0
+    formats:
+      - deb
+      - rpm
+    recommends:
+      - fio
+
+dockers:
+  - goos: linux
+    goarch: amd64
+    dockerfile: Dockerfile
+    ids:
+      - juju_exporter
+    image_templates:
+      - "neoaggelos/juju_exporter:{{ .Version }}"
+      - "neoaggelos/juju_exporter:latest"
+    skip_push: auto
