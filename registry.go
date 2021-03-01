@@ -90,7 +90,7 @@ func (r *registry) parseStatus(status *params.FullStatus) {
 					"agent_status":     sub.AgentStatus.Status,
 					"workload_status":  sub.WorkloadStatus.Status,
 					"application_name": applicationName,
-				}).Set(checkStatus(sub.WorkloadStatus.Status, []string{"active", "maintenance"}))
+				}).Set(checkStatus(sub.WorkloadStatus.Status, []string{"active"}))
 			}
 		}
 	}
