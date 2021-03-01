@@ -26,7 +26,7 @@ func newRegistry(model, modelUUID string) *registry {
 				Name: "juju_machine",
 				Help: "Juju machine",
 			},
-			[]string{"model", "model_uuid", "name", "id", "instance_status", "agent_status"},
+			[]string{"model", "model_uuid", "dns_name", "id", "instance_status", "agent_status"},
 		).MustCurryWith(modelLabels),
 		jujuApplication: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
@@ -95,9 +95,8 @@ func (r *registry) parseStatus(status *params.FullStatus) {
 		}
 	}
 	for machineName, machine := range status.Machines {
-		r.jujuMachine.With(prometheus.Labels{
-			"name":            machineName,
-			"id":              machine.Id,
+			"dns_name":        machine.DNSName,
+			"id":              machineName,
 			"instance_status": machine.InstanceStatus.Status,
 			"agent_status":    machine.AgentStatus.Status,
 		}).Set(checkStatus(machine.InstanceStatus.Status, []string{"running"}))
