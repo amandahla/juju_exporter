@@ -11,6 +11,7 @@ type registry struct {
 	jujuApplication *prometheus.GaugeVec
 	jujuUnit        *prometheus.GaugeVec
 	jujuSubordinate *prometheus.GaugeVec
+	jujuContainer   *prometheus.GaugeVec
 }
 
 func newRegistry(model, modelUUID string) *registry {
@@ -48,6 +49,13 @@ func newRegistry(model, modelUUID string) *registry {
 			},
 			[]string{"model", "model_uuid", "name", "subordinate_to", "application_name", "workload_status", "agent_status"},
 		).MustCurryWith(modelLabels),
+		jujuContainer: prometheus.NewGaugeVec(
+			prometheus.GaugeOpts{
+				Name: "juju_container_status",
+				Help: "Juju container",
+			},
+			[]string{"model", "model_uuid", "id", "dns_name", "parent_id", "parent_dns_name", "instance_status", "agent_status"},
+		).MustCurryWith(modelLabels),
 	}
 
 	r.MustRegister(
@@ -55,6 +63,7 @@ func newRegistry(model, modelUUID string) *registry {
 		r.jujuUnit,
 		r.jujuMachine,
 		r.jujuSubordinate,
+		r.jujuContainer,
 	)
 	return r
 }
@@ -92,6 +101,21 @@ func (r *registry) parseStatus(status *params.FullStatus) {
 			"instance_status": machine.InstanceStatus.Status,
 			"agent_status":    machine.AgentStatus.Status,
 		}).Set(checkStatus(machine.InstanceStatus.Status, []string{"running"}))
+
+		if len(machine.Containers) == 0 {
+			continue
+		}
+
+		for containerName, container := range machine.Containers {
+			r.jujuContainer.With(prometheus.Labels{
+				"dns_name":        container.DNSName,
+				"id":              containerName,
+				"instance_status": container.InstanceStatus.Status,
+				"agent_status":    container.AgentStatus.Status,
+				"parent_id":       machineName,
+				"parent_dns_name": machine.DNSName,
+			}).Set(checkStatus(machine.InstanceStatus.Status, []string{"running"}))
+		}
 	}
 }
 
