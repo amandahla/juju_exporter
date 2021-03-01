@@ -7,11 +7,11 @@ import (
 
 type registry struct {
 	*prometheus.Registry
-	jujuMachine     *prometheus.GaugeVec
-	jujuApplication *prometheus.GaugeVec
-	jujuUnit        *prometheus.GaugeVec
-	jujuSubordinate *prometheus.GaugeVec
-	jujuContainer   *prometheus.GaugeVec
+	jujuMachines     *prometheus.GaugeVec
+	jujuApplications *prometheus.GaugeVec
+	jujuUnits        *prometheus.GaugeVec
+	jujuSubordinates *prometheus.GaugeVec
+	jujuContainers   *prometheus.GaugeVec
 }
 
 func newRegistry(model, modelUUID string) *registry {
@@ -21,35 +21,35 @@ func newRegistry(model, modelUUID string) *registry {
 	}
 	r := &registry{
 		Registry: prometheus.NewRegistry(),
-		jujuMachine: prometheus.NewGaugeVec(
+		jujuMachines: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
-				Name: "juju_machine",
-				Help: "Juju machine",
+				Name: "juju_machines",
+				Help: "Juju machines",
 			},
 			[]string{"model", "model_uuid", "dns_name", "id", "instance_status", "agent_status"},
 		).MustCurryWith(modelLabels),
-		jujuApplication: prometheus.NewGaugeVec(
+		jujuApplications: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "juju_application",
 				Help: "Juju application",
 			},
 			[]string{"model", "model_uuid", "name", "status"},
 		).MustCurryWith(modelLabels),
-		jujuUnit: prometheus.NewGaugeVec(
+		jujuUnits: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "juju_unit",
 				Help: "Juju unit",
 			},
 			[]string{"model", "model_uuid", "name", "application_name", "workload_status", "agent_status"},
 		).MustCurryWith(modelLabels),
-		jujuSubordinate: prometheus.NewGaugeVec(
+		jujuSubordinates: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "juju_subordinate",
 				Help: "Juju subordinate",
 			},
 			[]string{"model", "model_uuid", "name", "subordinate_to", "application_name", "workload_status", "agent_status"},
 		).MustCurryWith(modelLabels),
-		jujuContainer: prometheus.NewGaugeVec(
+		jujuContainers: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "juju_container_status",
 				Help: "Juju container",
@@ -59,24 +59,24 @@ func newRegistry(model, modelUUID string) *registry {
 	}
 
 	r.MustRegister(
-		r.jujuApplication,
-		r.jujuUnit,
-		r.jujuMachine,
-		r.jujuSubordinate,
-		r.jujuContainer,
+		r.jujuApplications,
+		r.jujuUnits,
+		r.jujuMachines,
+		r.jujuSubordinates,
+		r.jujuContainers,
 	)
 	return r
 }
 
 func (r *registry) parseStatus(status *params.FullStatus) {
 	for applicationName, application := range status.Applications {
-		r.jujuApplication.With(prometheus.Labels{
+		r.jujuApplications.With(prometheus.Labels{
 			"name":   applicationName,
 			"status": application.Status.Status,
 		}).Set(checkStatus(application.Status.Status, []string{"active"}))
 
 		for unitName, unit := range application.Units {
-			r.jujuUnit.With(prometheus.Labels{
+			r.jujuUnits.With(prometheus.Labels{
 				"name":             unitName,
 				"agent_status":     unit.AgentStatus.Status,
 				"workload_status":  unit.WorkloadStatus.Status,
@@ -84,7 +84,7 @@ func (r *registry) parseStatus(status *params.FullStatus) {
 			}).Set(checkStatus(unit.WorkloadStatus.Status, []string{"active", "maintenance"}))
 
 			for subName, sub := range unit.Subordinates {
-				r.jujuSubordinate.With(prometheus.Labels{
+				r.jujuSubordinates.With(prometheus.Labels{
 					"name":             subName,
 					"subordinate_to":   unitName,
 					"agent_status":     sub.AgentStatus.Status,
@@ -95,6 +95,7 @@ func (r *registry) parseStatus(status *params.FullStatus) {
 		}
 	}
 	for machineName, machine := range status.Machines {
+		r.jujuMachines.With(prometheus.Labels{
 			"dns_name":        machine.DNSName,
 			"id":              machineName,
 			"instance_status": machine.InstanceStatus.Status,
@@ -106,7 +107,7 @@ func (r *registry) parseStatus(status *params.FullStatus) {
 		}
 
 		for containerName, container := range machine.Containers {
-			r.jujuContainer.With(prometheus.Labels{
+			r.jujuContainers.With(prometheus.Labels{
 				"dns_name":        container.DNSName,
 				"id":              containerName,
 				"instance_status": container.InstanceStatus.Status,
