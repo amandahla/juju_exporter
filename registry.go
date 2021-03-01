@@ -23,36 +23,36 @@ func newRegistry(model, modelUUID string) *registry {
 		Registry: prometheus.NewRegistry(),
 		jujuMachines: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
-				Name: "juju_machines",
+				Name: "juju_machines_status",
 				Help: "Juju machines",
 			},
 			[]string{"model", "model_uuid", "dns_name", "id", "instance_status", "agent_status"},
 		).MustCurryWith(modelLabels),
 		jujuApplications: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
-				Name: "juju_application",
+				Name: "juju_applications_status",
 				Help: "Juju application",
 			},
 			[]string{"model", "model_uuid", "name", "status"},
 		).MustCurryWith(modelLabels),
 		jujuUnits: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
-				Name: "juju_unit",
-				Help: "Juju unit",
+				Name: "juju_units_status",
+				Help: "Juju units",
 			},
 			[]string{"model", "model_uuid", "name", "application_name", "workload_status", "agent_status"},
 		).MustCurryWith(modelLabels),
 		jujuSubordinates: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
-				Name: "juju_subordinate",
-				Help: "Juju subordinate",
+				Name: "juju_subordinates_status",
+				Help: "Juju subordinates",
 			},
 			[]string{"model", "model_uuid", "name", "subordinate_to", "application_name", "workload_status", "agent_status"},
 		).MustCurryWith(modelLabels),
 		jujuContainers: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: "juju_container_status",
-				Help: "Juju container",
+				Help: "Juju containers",
 			},
 			[]string{"model", "model_uuid", "id", "dns_name", "parent_id", "parent_dns_name", "instance_status", "agent_status"},
 		).MustCurryWith(modelLabels),
