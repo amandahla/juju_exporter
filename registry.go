@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/juju/juju/apiserver/params"
+	"github.com/juju/juju/rpc/params"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

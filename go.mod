@@ -1,43 +1,84 @@
 module github.com/neoaggelos/juju_exporter
 
-go 1.15
-
-// Juju dependencies
-replace github.com/altoros/gosigma => github.com/juju/gosigma v0.0.0-20200420012028-063911838a9e
-
-replace gopkg.in/natefinch/lumberjack.v2 => github.com/juju/lumberjack v2.0.0-20200420012306-ddfd864a6ade+incompatible
-
-replace gopkg.in/mgo.v2 => github.com/juju/mgo v2.0.0-20201106044211-d9585b0b0d28+incompatible
-
-replace github.com/hashicorp/raft => github.com/juju/raft v2.0.0-20200420012049-88ad3b3f0a54+incompatible
-
-replace gopkg.in/yaml.v2 => github.com/juju/yaml v0.0.0-20200420012109-12a32b78de07
-
-replace github.com/dustin/go-humanize v1.0.0 => github.com/dustin/go-humanize v0.0.0-20141228071148-145fabdb1ab7
-
-replace github.com/hashicorp/raft-boltdb => github.com/juju/raft-boltdb v0.0.0-20200518034108-40b112c917c5
-
-// Temporarily pin goreleaser because of errors with io/fs
-replace github.com/goreleaser/goreleaser v0.158.0 => github.com/goreleaser/goreleaser v0.157.0
+go 1.22.6
 
 require (
-	github.com/Djarvur/go-err113 v0.1.0 // indirect
-	github.com/golangci/golangci-lint v1.36.0 // indirect
-	github.com/golangci/misspell v0.3.5 // indirect
-	github.com/golangci/revgrep v0.0.0-20180812185044-276a5c0a1039 // indirect
-	github.com/goreleaser/goreleaser v0.158.0
-	github.com/gostaticanalysis/analysisutil v0.6.1 // indirect
-	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af // indirect
-	github.com/juju/juju v0.0.0-20201113194435-339998a462e3
-	github.com/juju/names/v4 v4.0.0-20200929085019-be23e191fee0
-	github.com/matoous/godox v0.0.0-20200801072554-4fb83dc2941e // indirect
-	github.com/prometheus/client_golang v1.7.1
-	github.com/quasilyte/go-ruleguard v0.2.1 // indirect
-	github.com/quasilyte/regex/syntax v0.0.0-20200805063351-8f842688393c // indirect
-	github.com/spf13/afero v1.5.1 // indirect
-	github.com/stretchr/objx v0.3.0 // indirect
-	github.com/tdakkota/asciicheck v0.0.0-20200416200610-e657995f937b // indirect
-	github.com/timakin/bodyclose v0.0.0-20200424151742-cb6215831a94 // indirect
-	github.com/tomarrell/wrapcheck v0.0.0-20201130113247-1683564d9756 // indirect
+	github.com/juju/juju v0.0.0-20240812020153-5e07f2c9d041
+	github.com/juju/names/v5 v5.0.0
+	github.com/prometheus/client_golang v1.18.0
 	gopkg.in/yaml.v2 v2.4.0
+)
+
+require (
+	github.com/beorn7/perks v1.0.1 // indirect
+	github.com/canonical/lxd v0.0.0-20231214113525-e676fc63c50a // indirect
+	github.com/cespare/xxhash/v2 v2.2.0 // indirect
+	github.com/distribution/reference v0.5.0 // indirect
+	github.com/docker/distribution v2.8.3+incompatible // indirect
+	github.com/go-macaroon-bakery/macaroon-bakery/v3 v3.0.1 // indirect
+	github.com/go-macaroon-bakery/macaroonpb v1.0.0 // indirect
+	github.com/gobwas/glob v0.2.3 // indirect
+	github.com/golang/protobuf v1.5.3 // indirect
+	github.com/gorilla/websocket v1.5.1 // indirect
+	github.com/juju/ansiterm v1.0.0 // indirect
+	github.com/juju/charm/v12 v12.1.0 // indirect
+	github.com/juju/clock v1.1.1 // indirect
+	github.com/juju/cmd/v3 v3.0.15 // indirect
+	github.com/juju/collections v1.0.4 // indirect
+	github.com/juju/description/v7 v7.0.2 // indirect
+	github.com/juju/errors v1.0.0 // indirect
+	github.com/juju/featureflag v1.0.0 // indirect
+	github.com/juju/gnuflag v1.0.0 // indirect
+	github.com/juju/gojsonpointer v0.0.0-20150204194629-afe8b77aa08f // indirect
+	github.com/juju/gojsonreference v0.0.0-20150204194633-f0d24ac5ee33 // indirect
+	github.com/juju/gojsonschema v1.0.0 // indirect
+	github.com/juju/http/v2 v2.0.0 // indirect
+	github.com/juju/loggo v1.0.0 // indirect
+	github.com/juju/lru v1.0.0 // indirect
+	github.com/juju/mgo/v3 v3.0.4 // indirect
+	github.com/juju/mutex/v2 v2.0.0 // indirect
+	github.com/juju/os/v2 v2.2.5 // indirect
+	github.com/juju/proxy v1.0.0 // indirect
+	github.com/juju/retry v1.0.0 // indirect
+	github.com/juju/rfc/v2 v2.0.0 // indirect
+	github.com/juju/romulus v1.0.0 // indirect
+	github.com/juju/rpcreflect v1.2.0 // indirect
+	github.com/juju/schema v1.2.0 // indirect
+	github.com/juju/txn/v3 v3.0.2 // indirect
+	github.com/juju/utils/v3 v3.1.1 // indirect
+	github.com/juju/version/v2 v2.0.1 // indirect
+	github.com/juju/webbrowser v1.0.0 // indirect
+	github.com/juju/worker/v3 v3.5.0 // indirect
+	github.com/julienschmidt/httprouter v1.3.0 // indirect
+	github.com/kr/pretty v0.3.1 // indirect
+	github.com/kr/text v0.2.0 // indirect
+	github.com/lunixbochs/vtclean v1.0.0 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/matttproud/golang_protobuf_extensions/v2 v2.0.0 // indirect
+	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
+	github.com/opencontainers/go-digest v1.0.0 // indirect
+	github.com/prometheus/client_model v0.5.0 // indirect
+	github.com/prometheus/common v0.45.0 // indirect
+	github.com/prometheus/procfs v0.12.0 // indirect
+	github.com/rogpeppe/fastuuid v1.2.0 // indirect
+	github.com/rogpeppe/go-internal v1.12.0 // indirect
+	github.com/rs/xid v1.5.0 // indirect
+	github.com/vishvananda/netlink v1.2.1-beta.2 // indirect
+	github.com/vishvananda/netns v0.0.4 // indirect
+	github.com/xdg-go/stringprep v1.0.4 // indirect
+	golang.org/x/crypto v0.25.0 // indirect
+	golang.org/x/net v0.27.0 // indirect
+	golang.org/x/sys v0.22.0 // indirect
+	golang.org/x/term v0.22.0 // indirect
+	golang.org/x/text v0.16.0 // indirect
+	google.golang.org/protobuf v1.33.0 // indirect
+	gopkg.in/errgo.v1 v1.0.1 // indirect
+	gopkg.in/gobwas/glob.v0 v0.2.3 // indirect
+	gopkg.in/httprequest.v1 v1.2.1 // indirect
+	gopkg.in/juju/environschema.v1 v1.0.1 // indirect
+	gopkg.in/macaroon.v2 v2.1.0 // indirect
+	gopkg.in/retry.v1 v1.0.3 // indirect
+	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
+	gopkg.in/tomb.v2 v2.0.0-20161208151619-d5d1b5820637 // indirect
 )

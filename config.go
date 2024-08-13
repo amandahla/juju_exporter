@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/juju/juju/api"
-	"github.com/juju/names/v4"
+	"github.com/juju/names/v5"
 )
 
 // config is configuration for the Juju exporter.

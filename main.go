@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	apiclient "github.com/juju/juju/api/client/client"
 	"gopkg.in/yaml.v2"
 )
 
@@ -69,7 +70,12 @@ func main() {
 			}
 		}()
 
-		status, err := conn.Client().Status(modelConf.Patterns)
+		client := apiclient.NewClient(conn, nil)
+
+		status, err := client.Status(nil)
+		if err != nil {
+			log.Fatalf("Error requesting status: %s", err)
+		}
 		if err != nil {
 			log.Printf("Error retrieving Juju status for model %s: %v", model, err)
 			http.Error(rw, "error: could not retrieve Juju status", http.StatusExpectationFailed)
