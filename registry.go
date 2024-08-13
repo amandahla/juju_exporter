@@ -33,7 +33,7 @@ func newRegistry(model, modelUUID string) *registry {
 				Name: "juju_applications_status",
 				Help: "Juju application",
 			},
-			[]string{"model", "model_uuid", "name", "status"},
+			[]string{"model", "model_uuid", "name", "status", "channel", "revision"},
 		).MustCurryWith(modelLabels),
 		jujuUnits: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
@@ -73,6 +73,8 @@ func (r *registry) parseStatus(status *params.FullStatus) {
 		r.jujuApplications.With(prometheus.Labels{
 			"name":   applicationName,
 			"status": application.Status.Status,
+			"channel": application.CharmChannel,
+			"revision": application.CharmVersion,
 		}).Set(checkStatus(application.Status.Status, []string{"active"}))
 
 		for unitName, unit := range application.Units {
